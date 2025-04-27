@@ -1,0 +1,68 @@
+BONUS CHALLENGE FORM
+--------------------
+
+For each bonus challenge you have implemented, please replace the sentence "We are not entitled to this bonus."
+with a short description of:
+
+1. How it was implemented in your code
+2. Where it was used (in which class methods).
+3. How you tested that it is working correctly.
+
+--------------------
+
+1. Fully supporting all configuration fields and avoiding the use of magic numbers
+
+    1. Our code has access to all the configuration fields through the env.config input, this way we ensure that no constant values (magic numbers) are necessary to run the program.
+    The functions in the code as well as the definition of the loops and fields in the code based on these values defined in the configuration file.
+
+    2. Configuration fields are used throughout the Dealer, Player, and Table classes.
+     for instance- in Player class configuration fields are used to determine penalty and point freeze times, set, table, as well as the sizes of sets, tables, and features..
+     In table classs those field used for define  the number of players, table size, set size, and more.
+     Similarly Dealer class uses the configuration fields in many places such as the number of players, deck size and more.
+
+    3. We define different values in the configuration file in order to test the correctness and behavior of the game for different configuration values.
+     We saw that the game behavior and timings were adjusted accordingly based on the configurations that we changed in the configuration properties 
+     file (if we depended on "magic numbers" in our code it would not work properly for any configuration values).
+
+--------------------
+
+2. Terminating all threads (that you created) gracefully and in reverse order to the order they were created in.
+
+    1. In our code we have implemented graceful and reverse thread termination by ensuring that each thread is fully initialized and terminated (including an ai thread for non human players).
+     This is how we made sure that the order between the human threads and the AI threads would be correct.
+     In addition, when terminate the players threads we called terminate() for each player in a reverse order.
+
+    termination:
+     We ensured that after call terminate() for each palyer thread the dealer thread is using the join() method, also every non human player used this method to make sure the ai thread terminate before the player.
+     Join() allows the calling thread to wait for the termination of the specified thread.
+    
+    initializetion:
+     We used an initialization lock to ensure that the dealer waits until each player (including AI threads, if applicable) is fully initialized before the dealer moves to  to create the next player thread.
+     This ensures that threads are created and initialized in the correct order.
+
+    2.  termination: Both the player and dealer classes using join() in terminate() method.
+                     terminate() method iterates over player threads in reverse order than initializePlayersThreads() iterates over player threads.
+                     terminate() calling terminate for each player, initializePlayersThreads initialize and start player thread for each player.
+        initializetion:We create a lock in the Dealer class to ensure that the dealer waits until each player (including AI threads) is fully initialized before proceeding to create the next player thread.
+                       dealer waitss for notification implemented in initializePlayersThreads() method.
+                        In player class at the beggining of run(), before entering the main loop, we notify the dealer that the player created.
+
+    3. To check that all the threads we created terminated in reverse order we used the logs files provided making sure the order of create and terminate threads is correct.
+    We chaked it for diffrent configuration values.
+
+--------------------
+
+3. Handling the config.turnTimeoutMillis value as follows:
+config.turnTimeoutMillis < 0: display nothing.
+config.turnTimeoutMillis = 0: display a timer since the last action (reshuffle or set collected).
+Note: in modes without a countdown timer the dealer must ensure there is always at least one legal set on the table.
+
+We are not entitled to this bonus.
+
+--------------------
+
+4. Making sure that the threads do not wake up unless some actual job needs to be done (e.g., a value needs to be
+changed on the display, key input needs to be handled, etc.) and the only threads created by you are:
+1 thread per player + 1 additional thread for non-human players.
+
+We are not entitled to this bonus.
